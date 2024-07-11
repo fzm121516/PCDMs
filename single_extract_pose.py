@@ -2,7 +2,7 @@ from src.controlnet_aux import DWposeDetector
 from PIL import Image
 import torchvision.transforms as transforms
 import torch
-
+import numpy as np
 
 def init_dwpose_detector(device):
     # specify configs, ckpts and device, or it will be downloaded automatically and use cpu by default
@@ -30,7 +30,7 @@ def init_dwpose_detector(device):
 #     save_dwpose_image.save(save_path)
 #     print(f"Saved inference result to {save_path}")
 
-def inference_pose(img_path, save_path='./data/output_img.png'):
+def inference_pose(img_path, save_path='./data/output_img.png', array_save_path='./data/dwpose_image.npy'):
     # 指定使用的设备为CUDA（GPU），索引为0
     device = torch.device("cuda:0")  # 确保这里的设备索引正确
 
@@ -46,6 +46,12 @@ def inference_pose(img_path, save_path='./data/output_img.png'):
     # 将图像传入模型进行姿态推理，指定输出类型为'numpy'数组，且图像分辨率为输入图像的宽度
     dwpose_image = model(pil_image, output_type='np', image_resolution=image_width)
 
+    # # 打印 dwpose_image 数组
+    # print(dwpose_image.shape)
+    #
+    # # 保存 dwpose_image 数组到文件
+    # np.save(array_save_path, dwpose_image)
+
     # 将 numpy 数组转换回 PIL 图像
     save_dwpose_image = Image.fromarray(dwpose_image)
 
@@ -54,6 +60,7 @@ def inference_pose(img_path, save_path='./data/output_img.png'):
 
     # 打印保存成功的信息
     print(f"Saved inference result to {save_path}")
+    print(f"Saved numpy array to {array_save_path}")
 
 
 # 指定输入图像的路径
@@ -62,10 +69,8 @@ path = './data/img1.png'
 # 指定保存推理结果图像的路径
 save_path = './data/output_img1.png'
 
+# 指定保存 numpy 数组的路径
+array_save_path = './data/dwpose_image1.npy'
+
 # 调用推理函数，传入图像路径和保存路径
-inference_pose(path, save_path=save_path)
-
-path = './data/img1.png'
-save_path = './data/output_img1.png'
-
-inference_pose(path, save_path=save_path)
+inference_pose(path, save_path=save_path, array_save_path=array_save_path)
