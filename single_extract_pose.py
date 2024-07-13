@@ -27,3 +27,13 @@ def inference_pose(img_path, image_size=(1024, 1024)):
     dwpose_image = model(pil_image, output_type='np', image_resolution=image_size[1])
     save_dwpose_image = Image.fromarray(dwpose_image)
     return save_dwpose_image
+
+
+# 指定输入图像的路径
+path = './data/img1.png'
+
+# 指定保存推理结果图像的路径
+save_path = './data/output_img1.png'
+
+# 调用推理函数，传入图像路径和保存路径
+inference_pose(path).save(save_path)
