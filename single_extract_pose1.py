@@ -78,7 +78,10 @@ print("Find ", num_image, " images")
 # Process
 for i in range(num_image):
     image_path = image_list[i]
-    image_name = image_path[image_path.rfind('/') + 1:image_path.rfind('.')]
+    image_name_with_ext = os.path.basename(image_path)
+
+    # 去掉扩展名
+    image_name = os.path.splitext(image_name_with_ext)[0]
     print(i, '/', num_image, image_name)
 
 
